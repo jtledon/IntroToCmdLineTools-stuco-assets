@@ -1,5 +1,9 @@
-import {makeScene2D, Circle, Txt} from '@motion-canvas/2d';
-import {all, createRef} from '@motion-canvas/core';
+import {makeScene2D, Line, Circle, Txt, CubicBezier} from '@motion-canvas/2d';
+import {all, createRef, createSignal} from '@motion-canvas/core';
+
+// TODO: make a function that takes in two circles, and returns the points for arrows to draw between them
+//          this should use atan2 to get the angle, figure out the x and y offsets using the angle and rad
+//          and get the perfect arrow between two circles
 
 export default makeScene2D(function* (view) {
     view.fill("black")
@@ -49,22 +53,60 @@ export default makeScene2D(function* (view) {
             ref={commitB}
 
             x={-300}
-            fill="#e1323877"
-            stroke="#e13238"
+            fill="#1d363e"
+            stroke="#72c3e2"
+
+            opacity={0}
+            zIndex={-1}
 
             {...commitStyle}
-        />
-        <Txt
-            text={"3b5220"}
-            x={() => commitB().position.x()}
-            y={() => commitB().position.y()}
-            {...textStyle}
-        />
+        >
+            <Txt
+                text={"3b5220"}
+                // x={() => commitB().position.x()}
+                // y={() => commitB().position.y()}
+                {...textStyle}
+            />
+        </Circle>
         </>
     );
 
     yield* all(
-            commitA().position.x(300, 1).to(-300, 1),
-            commitA().position.y(300, 1).to(-300, 1),
-            );
+        commitB().position.y(-300, 1),//.to(-300, 1),
+        commitB().opacity(1, 1.3)
+    );
+
+
+
+    // const arrow = createRef<CubicBezier>();
+    const arrow = createRef<Line>();
+
+    view.add(
+        <Line
+            ref={arrow}
+            /* points={[
+                // commitA().position.x(),
+                0,
+                () => commitB().position.x(),
+            ]} */
+            points={() => [
+                commitB().position,
+                commitA().position
+            ]}
+            lineWidth={14}
+            stroke={"white"}
+            // x={commitA().position.x()}
+            // y={commitA().position.y()}
+            // scale={0}
+            endArrow
+            startArrow
+        />
+        /* <CubicBezier
+            ref={arrow}
+
+            startArrow
+        /> */
+    )
+
+    yield* arrow().scale(1, 1)
 });
