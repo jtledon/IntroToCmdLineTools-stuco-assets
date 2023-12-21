@@ -26,7 +26,9 @@ export default makeScene2D(function* (view) {
 
     const commitStyle = {
         width: 200,
-        ratio: 1,
+        // ratio: 1,
+        // ratio: 1/2,
+        ratio: 2,
         lineWidth: 8
     }
 
@@ -80,6 +82,7 @@ export default makeScene2D(function* (view) {
 
     yield* all(
         cB().position.y(-300, 1),//.to(-300, 1),
+        // cB().absoluteRotation(360, 1),
         cB().opacity(1, 1.3)
     );
 
