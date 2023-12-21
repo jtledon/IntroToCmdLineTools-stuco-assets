@@ -37,7 +37,7 @@ export default makeScene2D(function* (view) {
         <Circle
             ref={cA}
 
-            x={-150}
+            x={0} // TODO: change back to an offset
             fill="#451f15"
             stroke="#ef7d5e"
 
@@ -55,6 +55,7 @@ export default makeScene2D(function* (view) {
     const rotationPath = createRef<Circle>();
     const progress = createSignal(0);
 
+    // TODO: attach text like "feature" or "HEAD" to a commit by using cB.Top
     view.add(
         <>
         <Circle
@@ -73,7 +74,7 @@ export default makeScene2D(function* (view) {
             fill="#1d363e"
             stroke="#72c3e2"
 
-            opacity={0}
+            opacity={1}
             zIndex={-1}
 
             {...commitStyle}
@@ -86,18 +87,25 @@ export default makeScene2D(function* (view) {
             />
         </Circle>
         <CommitRelationArrow
-            commitA={cA}
-            commitB={cB}
+            commitParent={cA}
+            commitChild={cB}
+        />
+        <Txt
+            text={"hi"}
+            position={cB().right}
+            stroke={"white"}
+            fill={"white"}
+            lineWidth={2}
         />
         </>
     );
 
     yield* all(
-        cB().opacity(1, 4),
+        // cB().opacity(1, 4),
 
-        cB().absoluteRotation(360, 4),
+        cB().absoluteRotation(90, 16),
         // cB().position.y(-300, 4),//.to(-300, 1),
-        progress(1, 4)
+        progress(1, 16)
     );
 
 

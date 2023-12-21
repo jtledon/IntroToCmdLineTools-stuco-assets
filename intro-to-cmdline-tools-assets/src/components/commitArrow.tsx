@@ -15,12 +15,13 @@ import {
     Reference,
     clamp,
     useLogger,
+    Matrix2D,
 } from '@motion-canvas/core';
 
 // https://motioncanvas.io/docs/custom-components/
 export interface CommitRelationArrowProps extends RayProps {
-    commitA: Reference<Circle>
-    commitB: Reference<Circle>
+    commitParent: Reference<Circle>
+    commitChild: Reference<Circle>
 }
 
 const arrowStyle = {
@@ -28,6 +29,7 @@ const arrowStyle = {
     // lineWidth: 16,
 
     arrowSize: 36,
+    startArrow: true, // TODO: remove
     endArrow: true,
 
     startOffset: 20,
@@ -40,58 +42,82 @@ export class CommitRelationArrow extends Ray {
             ...props,
         })
 
-        // This is generalized for elipses, which will trivially work for circles as well
-        const cAsize = props.commitA().size()
-        const majorA = Math.max(cAsize.x, cAsize.y) / 2
-        const minorA = Math.min(cAsize.x, cAsize.y) / 2
-        const cApos = props.commitA().position
+        // CONNECTIONS GO FROM CHILD TO PARENT
+        const cPrnt = props.commitParent
+        const cChld = props.commitChild
 
-        const cBsize = props.commitB().size()
-        const majorB = Math.max(cBsize.x, cBsize.y) / 2
-        const minorB = Math.min(cBsize.x, cBsize.y) / 2
-        const cBpos = props.commitB().position
+        // This is generalized for elipses, which will trivially work for circles as well
+        const majorPrnt = Math.max(cPrnt().size().x, cPrnt().size().y) / 2
+        const minorPrnt = Math.min(cPrnt().size().x, cPrnt().size().y) / 2
+
+        const majorChld = Math.max(cChld().size().x, cChld().size().y) / 2
+        const minorChld = Math.min(cChld().size().x, cChld().size().y) / 2
 
         // TODO: add rotation into this calculation
-        const theta = createSignal(() => Math.atan2(cApos.y() - cBpos.y(), cApos.x() - cBpos.x()) )
-        const calcRad = (theta : number, major : number, minor : number) => {
-            let majSquared = major**2 * Math.sin(theta)**2
-            let minSquared = minor**2 * Math.cos(theta)**2
+        const thetaChld = createSignal(() => Math.atan2(cChld().position.y() - cPrnt().position.y(), cChld().position.x() - cPrnt().position.x()) )
+        const thetaPrnt = createSignal(() => Math.PI/2 - thetaChld())
+        const calcRad = (name: string, theta: number, rotation: number, major: number, minor: number) => {
+            // if (rotation != 0) {
+                console.log("\n", name)
+                console.log("theta: ", theta)
+                console.log("rotation: ", rotation)
+                console.log("addition: ", theta + rotation)
+            // }
+            let majSquared = major**2 * Math.sin(theta + rotation)**2
+            let minSquared = minor**2 * Math.cos(theta + rotation)**2
             let rad = (major * minor) / (Math.sqrt(majSquared + minSquared))
             return rad
         }
-        const aRad = createSignal(() => calcRad(theta(), majorA, minorA))
-        const bRad = createSignal(() => calcRad(theta(), majorB, minorB))
+        const rotPrnt = createSignal(() => cPrnt().rotation()*Math.PI/180)
+        const rotChld = createSignal(() => cChld().rotation()*Math.PI/180)
+        const radPrnt = createSignal(() => calcRad("Parent", thetaPrnt(), rotPrnt(), majorPrnt, minorPrnt))
+        const radChld = createSignal(() => calcRad("Child", thetaChld(), rotChld(), majorChld, minorChld))
 
-        const fromOffset = Vector2.createSignal(() => new Vector2(aRad()*Math.cos(theta()), aRad()*Math.sin(theta())))
-        const toOffset = Vector2.createSignal(() => new Vector2(bRad()*Math.cos(theta()), bRad()*Math.sin(theta())))
+        const offsetPrnt = Vector2.createSignal(() => new Vector2(
+            radPrnt()*Math.cos(thetaPrnt()),
+            radPrnt()*Math.sin(thetaPrnt())
+        ))
+        const offsetChld = Vector2.createSignal(() => new Vector2(
+            radChld()*Math.cos(thetaChld()),
+            radChld()*Math.sin(thetaChld())
+        ))
+
+        // https://en.wikipedia.org/wiki/Rotation_matrix
+        /* const rotatedFromOffset = Vector2.createSignal(() => new Vector2(
+            fromOffset.x()*Math.cos(cA().rotation()) - fromOffset.y()*Math.sin(cA().rotation()),
+            fromOffset.x()*Math.sin(cA().rotation()) + fromOffset.y()*Math.cos(cA().rotation())
+        ))
+        const rotatedToOffset = Vector2.createSignal(() => new Vector2(
+
+        )) */
 
         const ray = createRef<Ray>();
         this.add(
             <>
             <Ray
-                // x={() => props.commitB().position.x()}
-                // y={() => props.commitB().position.y()}
+                // x={() => cB().position.x()}
+                // y={() => cB().position.y()}
                 ref={ray}
-                from={() => props.commitB().position().add(fromOffset())}
-                to={() => props.commitA().position().sub(toOffset())}
-                // from={props.commitB().position}
-                // to={props.commitA().position}
+                from={() => cChld().position().sub(offsetChld())}
+                to={() => cPrnt().position().add(offsetPrnt())}
+                // from={cB().position}
+                // to={cA().position}
                 lineWidth={() => clamp(0, 16, ray().arcLength()) }
                 {...arrowStyle}
             />
             <Line
                 stroke={"red"}
                 points={[
-                    props.commitB().position,
-                    () => props.commitB().position().add(fromOffset())
+                    cChld().position,
+                    () => cChld().position().sub(offsetChld())
                 ]}
                 lineWidth={8}
             />
             <Line
                 stroke={"red"}
                 points={[
-                    props.commitA().position,
-                    () => props.commitA().position().sub(toOffset())
+                    cPrnt().position,
+                    () => cPrnt().position().sub(offsetPrnt())
                 ]}
                 lineWidth={8}
             />
