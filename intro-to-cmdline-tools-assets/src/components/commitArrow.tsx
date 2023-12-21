@@ -51,6 +51,7 @@ export class CommitRelationArrow extends Ray {
         const minorB = Math.min(cBsize.x, cBsize.y) / 2
         const cBpos = props.commitB().position
 
+        // TODO: add rotation into this calculation
         const theta = createSignal(() => Math.atan2(cApos.y() - cBpos.y(), cApos.x() - cBpos.x()) )
         const calcRad = (theta : number, major : number, minor : number) => {
             let majSquared = major**2 * Math.sin(theta)**2
@@ -90,7 +91,7 @@ export class CommitRelationArrow extends Ray {
                 stroke={"red"}
                 points={[
                     props.commitA().position,
-                    () => props.commitA().position().add(toOffset())
+                    () => props.commitA().position().sub(toOffset())
                 ]}
                 lineWidth={8}
             />

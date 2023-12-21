@@ -37,7 +37,7 @@ export default makeScene2D(function* (view) {
         <Circle
             ref={cA}
 
-            x={-300}
+            x={-150}
             fill="#451f15"
             stroke="#ef7d5e"
 
@@ -52,12 +52,24 @@ export default makeScene2D(function* (view) {
         </>
     );
 
+    const rotationPath = createRef<Circle>();
+    const progress = createSignal(0);
+
     view.add(
         <>
         <Circle
+            ref={rotationPath}
+            ratio={1}
+            width={800}
+            stroke={"yellow"}
+            lineWidth={6}
+            x={cA().position.x()}
+        />
+        <Circle
             ref={cB}
 
-            x={-20}
+            // x={-20}
+            position={() => rotationPath().getPointAtPercentage(progress()).position}
             fill="#1d363e"
             stroke="#72c3e2"
 
@@ -81,9 +93,11 @@ export default makeScene2D(function* (view) {
     );
 
     yield* all(
-        cB().position.y(-300, 1),//.to(-300, 1),
-        // cB().absoluteRotation(360, 1),
-        cB().opacity(1, 1.3)
+        cB().opacity(1, 4),
+
+        cB().absoluteRotation(360, 4),
+        // cB().position.y(-300, 4),//.to(-300, 1),
+        progress(1, 4)
     );
 
 
