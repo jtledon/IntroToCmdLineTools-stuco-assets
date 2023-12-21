@@ -55,7 +55,8 @@ export class CommitRelationArrow extends Ray {
 
         // TODO: add rotation into this calculation
         const thetaChld = createSignal(() => Math.atan2(cChld().position.y() - cPrnt().position.y(), cChld().position.x() - cPrnt().position.x()) )
-        const thetaPrnt = createSignal(() => Math.PI/2 - thetaChld())
+        const thetaPrnt = createSignal(() => Math.atan2(cPrnt().position.y() - cChld().position.y(), cPrnt().position.x() - cChld().position.x()) )
+        // const thetaPrnt = createSignal(() => Math.PI/2 - thetaChld())
         const calcRad = (name: string, theta: number, rotation: number, major: number, minor: number) => {
             // if (rotation != 0) {
                 console.log("\n", name)
@@ -63,8 +64,8 @@ export class CommitRelationArrow extends Ray {
                 console.log("rotation: ", rotation)
                 console.log("addition: ", theta + rotation)
             // }
-            let majSquared = major**2 * Math.sin(theta + rotation)**2
-            let minSquared = minor**2 * Math.cos(theta + rotation)**2
+            let majSquared = major**2 * Math.sin(theta - rotation)**2
+            let minSquared = minor**2 * Math.cos(theta - rotation)**2
             let rad = (major * minor) / (Math.sqrt(majSquared + minSquared))
             return rad
         }
@@ -99,7 +100,7 @@ export class CommitRelationArrow extends Ray {
                 // y={() => cB().position.y()}
                 ref={ray}
                 from={() => cChld().position().sub(offsetChld())}
-                to={() => cPrnt().position().add(offsetPrnt())}
+                to={() => cPrnt().position().sub(offsetPrnt())}
                 // from={cB().position}
                 // to={cA().position}
                 lineWidth={() => clamp(0, 16, ray().arcLength()) }

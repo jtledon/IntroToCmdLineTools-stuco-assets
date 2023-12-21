@@ -27,8 +27,8 @@ export default makeScene2D(function* (view) {
     const commitStyle = {
         width: 200,
         // ratio: 1,
-        // ratio: 1/2,
-        ratio: 2,
+        ratio: 1/2,
+        // ratio: 2,
         lineWidth: 8
     }
 
@@ -37,7 +37,8 @@ export default makeScene2D(function* (view) {
         <Circle
             ref={cA}
 
-            x={0} // TODO: change back to an offset
+            // x={0} // TODO: change back to an offset
+            x={-150}
             fill="#451f15"
             stroke="#ef7d5e"
 
@@ -103,7 +104,7 @@ export default makeScene2D(function* (view) {
     yield* all(
         // cB().opacity(1, 4),
 
-        cB().absoluteRotation(90, 16),
+        cB().absoluteRotation(720, 16),
         // cB().position.y(-300, 4),//.to(-300, 1),
         progress(1, 16)
     );
