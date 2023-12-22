@@ -2,11 +2,6 @@ import {makeScene2D, Line, Circle, Txt, CubicBezier, Ray} from '@motion-canvas/2
 import {all, createRef, createSignal} from '@motion-canvas/core';
 import { CommitRelationArrow } from '../components/commitArrow';
 
-// TODO: make a function that takes in two circles, and returns the points for arrows to draw between them
-//          this should use atan2 to get the angle, figure out the x and y offsets using the angle and rad
-//          and get the perfect arrow between two circles
-
-
 export default makeScene2D(function* (view) {
     view.fill("black")
 

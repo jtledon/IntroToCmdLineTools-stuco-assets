@@ -1,7 +1,11 @@
 import {makeProject} from '@motion-canvas/core';
 
-import testing from './scenes/testing?scene';
+import commit_testing from './scenes/commit-testing?scene';
+import terminal_testing from './scenes/terminal-testing?scene';
 
 export default makeProject({
-  scenes: [testing],
+  scenes: [
+      commit_testing,
+      terminal_testing,
+  ],
 });
