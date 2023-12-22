@@ -19,6 +19,7 @@ export interface CommitRelationArrowProps extends RayProps {
     commitChild: Reference<Circle>
 }
 
+const arrowOffsets = 20;
 const arrowStyle = {
     stroke: "white",
     // lineWidth: 16,
@@ -27,8 +28,8 @@ const arrowStyle = {
     // startArrow: true,
     endArrow: true,
 
-    startOffset: 20,
-    endOffset: 20,
+    startOffset: arrowOffsets,
+    endOffset: arrowOffsets,
 }
 
 export class CommitRelationArrow extends Ray {
