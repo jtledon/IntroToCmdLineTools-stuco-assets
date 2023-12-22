@@ -5,13 +5,14 @@ import {
     Txt,
     CubicBezier,
     Ray,
-    Rect
+    Rect,
 } from '@motion-canvas/2d';
 
 import {
     all,
     createRef,
-    createSignal
+    createSignal,
+    Origin,
 } from '@motion-canvas/core';
 
 export default makeScene2D(function* (view) {
@@ -21,10 +22,8 @@ export default makeScene2D(function* (view) {
     const machine = "stuco"
     const directory = "~/git"
 
-    console.log(view.left(), view.topLeft(), view.bottomLeft())
     const promptHeight = 50
     const promptPadding = 20
-
 
     const promptA = createRef<Rect>();
     const promptB = createRef<Rect>();
@@ -34,10 +33,12 @@ export default makeScene2D(function* (view) {
         <Rect layout
             ref={promptA}
             fill={"#3165c4"}
-            size={[null, promptHeight]}
-            offset={[-1, -1]}
-            height={promptHeight}
-            // left={view.left} // FIXME: should work
+            size={[null, promptHeight]} // scale the width based on the content
+            // offset={[-1, -1]}
+            // left={view.left} // FIXME: should work after merging https://github.com/motion-canvas/motion-canvas/issues/88[23]
+            left={view.getOriginDelta(Origin.TopLeft)}
+            alignItems={"center"}
+            justifyContent={"center"}
         >
             <Txt
                 text={`${username}@${machine}`}
@@ -52,9 +53,10 @@ export default makeScene2D(function* (view) {
             ref={promptB}
             fill={"#cccccc"}
             size={[null, 50]}
-            // offset={[-1, 0]}
             height={promptHeight}
             left={promptA().right}
+            alignItems={"center"}
+            justifyContent={"center"}
         >
             <Txt
                 text={directory}
@@ -71,6 +73,8 @@ export default makeScene2D(function* (view) {
             // offset={[-1, 0]}
             height={promptHeight}
             left={promptB().right}
+            alignItems={"center"}
+            justifyContent={"center"}
         >
             <Txt
                 text={"main >"}
@@ -82,25 +86,7 @@ export default makeScene2D(function* (view) {
         </Rect>
         </>
     )
-    promptA().absolutePosition(view.topLeft()) // FIXME: when this issue gets resolved and merged: https://github.com/motion-canvas/motion-canvas/issues/881
-    // promptB().absolutePosition(promptA().position)
-
-
-
-    // const node = createRef<Rect>();
-    // view.add(
-    //     <>
-    //     <Rect layout
-    //         ref={node}
-    //         fill={"red"}
-    //         size={100}
-    //         offset={[-1, -1]}
-    //     />
-    //     <Rect layout
-    //         fill={"blue"}
-    //         size={100}
-    //         left={node().right}
-    //     />
-    //     </>
-    // )
+    // promptA().absolutePosition(view.topLeft()) // FIXME: when this issue gets resolved and merged: https://github.com/motion-canvas/motion-canvas/issues/881
+    // promptA().position(promptA().position().add(promptA().size()))
+    promptA().position(promptA().position().add(promptA().size().div(2)))
 });
