@@ -1,11 +1,8 @@
 import {
-    Txt,
-    Rect,
     Circle,
     Line,
     Ray,
     RayProps,
-    vector2Signal,
 } from '@motion-canvas/2d';
 
 import {
@@ -14,8 +11,6 @@ import {
     Vector2,
     Reference,
     clamp,
-    useLogger,
-    Matrix2D,
 } from '@motion-canvas/core';
 
 // https://motioncanvas.io/docs/custom-components/
@@ -29,7 +24,7 @@ const arrowStyle = {
     // lineWidth: 16,
 
     arrowSize: 36,
-    startArrow: true, // TODO: remove
+    // startArrow: true,
     endArrow: true,
 
     startOffset: 20,
@@ -47,23 +42,25 @@ export class CommitRelationArrow extends Ray {
         const cChld = props.commitChild
 
         // This is generalized for elipses, which will trivially work for circles as well
-        const majorPrnt = Math.max(cPrnt().size().x, cPrnt().size().y) / 2
-        const minorPrnt = Math.min(cPrnt().size().x, cPrnt().size().y) / 2
+        let majorPrnt = Math.max(cPrnt().size().x, cPrnt().size().y) / 2
+        let minorPrnt = Math.min(cPrnt().size().x, cPrnt().size().y) / 2
+        // this is to combat the implicit assumption that the major axis of an ellipse will always be on the X-axis
+        if (cPrnt().size().x < cPrnt().size().y) {
+            [majorPrnt, minorPrnt] = [minorPrnt, majorPrnt]
+        }
 
-        const majorChld = Math.max(cChld().size().x, cChld().size().y) / 2
-        const minorChld = Math.min(cChld().size().x, cChld().size().y) / 2
+        let majorChld = Math.max(cChld().size().x, cChld().size().y) / 2
+        let minorChld = Math.min(cChld().size().x, cChld().size().y) / 2
+        // this is to combat the implicit assumption that the major axis of an ellipse will always be on the X-axis
+        if (cChld().size().x < cChld().size().y) {
+            [majorChld, minorChld] = [minorChld, majorChld]
+        }
 
-        // TODO: add rotation into this calculation
+        // https://www.mathopenref.com/ellipseaxes.html#:~:text=The%20major%20and%20minor%20axes,the%20ellipse%20is%20a%20circle.
+        // https://stackoverflow.com/questions/17130079/finding-the-radius-of-an-ellipse-based-on-its-angle-from-major-or-minor-axis
         const thetaChld = createSignal(() => Math.atan2(cChld().position.y() - cPrnt().position.y(), cChld().position.x() - cPrnt().position.x()) )
         const thetaPrnt = createSignal(() => Math.atan2(cPrnt().position.y() - cChld().position.y(), cPrnt().position.x() - cChld().position.x()) )
-        // const thetaPrnt = createSignal(() => Math.PI/2 - thetaChld())
         const calcRad = (name: string, theta: number, rotation: number, major: number, minor: number) => {
-            // if (rotation != 0) {
-                console.log("\n", name)
-                console.log("theta: ", theta)
-                console.log("rotation: ", rotation)
-                console.log("addition: ", theta + rotation)
-            // }
             let majSquared = major**2 * Math.sin(theta - rotation)**2
             let minSquared = minor**2 * Math.cos(theta - rotation)**2
             let rad = (major * minor) / (Math.sqrt(majSquared + minSquared))
@@ -83,26 +80,13 @@ export class CommitRelationArrow extends Ray {
             radChld()*Math.sin(thetaChld())
         ))
 
-        // https://en.wikipedia.org/wiki/Rotation_matrix
-        /* const rotatedFromOffset = Vector2.createSignal(() => new Vector2(
-            fromOffset.x()*Math.cos(cA().rotation()) - fromOffset.y()*Math.sin(cA().rotation()),
-            fromOffset.x()*Math.sin(cA().rotation()) + fromOffset.y()*Math.cos(cA().rotation())
-        ))
-        const rotatedToOffset = Vector2.createSignal(() => new Vector2(
-
-        )) */
-
         const ray = createRef<Ray>();
         this.add(
             <>
             <Ray
-                // x={() => cB().position.x()}
-                // y={() => cB().position.y()}
                 ref={ray}
                 from={() => cChld().position().sub(offsetChld())}
                 to={() => cPrnt().position().sub(offsetPrnt())}
-                // from={cB().position}
-                // to={cA().position}
                 lineWidth={() => clamp(0, 16, ray().arcLength()) }
                 {...arrowStyle}
             />
@@ -112,7 +96,8 @@ export class CommitRelationArrow extends Ray {
                     cChld().position,
                     () => cChld().position().sub(offsetChld())
                 ]}
-                lineWidth={8}
+                lineWidth={4}
+                opacity={0}
             />
             <Line
                 stroke={"red"}
@@ -120,7 +105,8 @@ export class CommitRelationArrow extends Ray {
                     cPrnt().position,
                     () => cPrnt().position().sub(offsetPrnt())
                 ]}
-                lineWidth={8}
+                lineWidth={4}
+                opacity={0}
             />
             </>
         )

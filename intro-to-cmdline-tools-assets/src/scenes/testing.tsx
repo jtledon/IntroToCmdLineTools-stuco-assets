@@ -12,7 +12,7 @@ export default makeScene2D(function* (view) {
 
     const cA = createRef<Circle>(); // commitA
     const cB = createRef<Circle>(); // commitB
-    const cBparent = createRef<Line>();
+    const cC = createRef<Circle>(); // commitC
 
     const textStyle = {
         stroke: "white",
@@ -27,8 +27,8 @@ export default makeScene2D(function* (view) {
     const commitStyle = {
         width: 200,
         // ratio: 1,
-        ratio: 1/2,
-        // ratio: 2,
+        // ratio: 1/2,
+        ratio: 2,
         lineWidth: 8
     }
 
@@ -43,12 +43,20 @@ export default makeScene2D(function* (view) {
             stroke="#ef7d5e"
 
             {...commitStyle}
-        />
+            ratio={1/1.25}
+        >
+            <Txt
+                text={"f79f20"}
+                // x={() => cA().position.x()}
+                // y={() => cA().position.y()}
+                {...textStyle}
+            />
+        </Circle>
         <Txt
-            text={"f79f20"}
-            x={() => cA().position.x()}
-            y={() => cA().position.y()}
-            {...textStyle}
+            // text={"f79f20"}
+            // x={() => cA().position.x()}
+            // y={() => cA().position.y()}
+            // {...textStyle}
         />
         </>
     );
@@ -61,8 +69,8 @@ export default makeScene2D(function* (view) {
         <>
         <Circle
             ref={rotationPath}
-            ratio={1}
-            width={800}
+            ratio={2}
+            width={1000}
             stroke={"yellow"}
             lineWidth={6}
             x={cA().position.x()}
@@ -92,11 +100,34 @@ export default makeScene2D(function* (view) {
             commitChild={cB}
         />
         <Txt
-            text={"hi"}
+            text={"."}
             position={cB().right}
             stroke={"white"}
             fill={"white"}
             lineWidth={2}
+        />
+
+
+        <Circle
+            ref={cC}
+
+            x={150}
+            y={-400}
+            fill="#213419"
+            stroke="#89bd60"
+
+            {...commitStyle}
+        >
+            <Txt
+                text={"ba09f4"}
+                // x={() => cA().position.x()}
+                // y={() => cA().position.y()}
+                {...textStyle}
+            />
+        </Circle>
+        <CommitRelationArrow
+            commitParent={cB}
+            commitChild={cC}
         />
         </>
     );
@@ -104,6 +135,7 @@ export default makeScene2D(function* (view) {
     yield* all(
         // cB().opacity(1, 4),
 
+        cA().absoluteRotation(90, 16),
         cB().absoluteRotation(720, 16),
         // cB().position.y(-300, 4),//.to(-300, 1),
         progress(1, 16)
