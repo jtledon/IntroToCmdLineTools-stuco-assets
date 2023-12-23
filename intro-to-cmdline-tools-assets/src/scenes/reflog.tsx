@@ -19,7 +19,7 @@ import {
     Origin,
 } from '@motion-canvas/core';
 import { Commit } from '../components/commit';
-import { CommitRelationArrow } from '../components/commitArrow';
+import { CommitRelationArrow } from '../components/commit-arrow';
 import { Prompt } from '../components/prompt';
 
 export default makeScene2D(function* (view) {

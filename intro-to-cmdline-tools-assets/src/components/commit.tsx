@@ -60,6 +60,7 @@ export class Commit extends Circle {
         // this.commitHash = props.commitHash()
 
         this.add(
+            <>
             <Circle ref={props.commitRef}
                 {...commitStyle} // this come first to have a default
                 {...props} // these come next so that I can override the defaults using props
@@ -73,6 +74,15 @@ export class Commit extends Circle {
                     // text={`${props.commitRef()}`}
                 />
             </Circle>
+            <Txt
+                text={() => `x(${props.commitRef().position.x().toFixed(2)})\ny(${props.commitRef().position.y().toFixed(2)})`}
+                fill={"yellow"}
+                stroke={"yellow"}
+                lineWidth={2}
+                bottom={() => props.commitRef().top()}
+                fontSize={36}
+            />
+            </>
         )
     }
 }

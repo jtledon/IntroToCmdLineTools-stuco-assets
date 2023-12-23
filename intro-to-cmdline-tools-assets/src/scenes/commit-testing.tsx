@@ -1,6 +1,6 @@
 import {makeScene2D, Line, Circle, Txt, CubicBezier, Ray, Rect} from '@motion-canvas/2d';
 import {all, createRef, createSignal, linear} from '@motion-canvas/core';
-import { CommitRelationArrow } from '../components/commitArrow';
+import { CommitRelationArrow } from '../components/commit-arrow';
 
 export default makeScene2D(function* (view) {
     view.fill("black")

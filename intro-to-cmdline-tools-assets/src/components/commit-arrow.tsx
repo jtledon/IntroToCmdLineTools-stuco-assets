@@ -3,6 +3,7 @@ import {
     Line,
     Ray,
     RayProps,
+    Txt,
 } from '@motion-canvas/2d';
 
 import {
@@ -91,6 +92,14 @@ export class CommitRelationArrow extends Ray {
                 lineWidth={() => clamp(0, 16, ray().arcLength()) }
                 {...arrowStyle}
             />
+            <Txt
+                text={() => `x(${cChld().position.x().toFixed(2)})\ny(${cChld().position.y().toFixed(2)})`}
+                fill={"red"}
+                stroke={"red"}
+                lineWidth={2}
+                bottom={() => cChld().top()}
+                fontSize={36}
+            />
             <Line
                 stroke={"red"}
                 points={[
@@ -98,7 +107,7 @@ export class CommitRelationArrow extends Ray {
                     () => cChld().position().sub(offsetChld())
                 ]}
                 lineWidth={4}
-                opacity={0}
+                // opacity={0}
             />
             <Line
                 stroke={"red"}
@@ -107,7 +116,7 @@ export class CommitRelationArrow extends Ray {
                     () => cPrnt().position().sub(offsetPrnt())
                 ]}
                 lineWidth={4}
-                opacity={0}
+                // opacity={0}
             />
             </>
         )
