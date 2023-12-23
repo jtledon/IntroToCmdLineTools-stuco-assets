@@ -85,8 +85,9 @@ export default makeScene2D(function* (view) {
         >
             <Txt
                 text={"3b5220"}
-                // x={() => commitB().position.x()}
-                // y={() => commitB().position.y()}
+                // text={`${cB()}`}
+                // x={() => cB().position.x()}
+                // y={() => cB().position.y()}
                 {...textStyle}
             />
         </Circle>
