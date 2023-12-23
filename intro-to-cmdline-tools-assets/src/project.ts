@@ -8,6 +8,6 @@ export default makeProject({
   scenes: [
       commit_testing,
       // terminal_testing,
-      reflog
+      // reflog
   ],
 });

@@ -1,5 +1,5 @@
-import {makeScene2D, Line, Circle, Txt, CubicBezier, Ray} from '@motion-canvas/2d';
-import {all, createRef, createSignal} from '@motion-canvas/core';
+import {makeScene2D, Line, Circle, Txt, CubicBezier, Ray, Rect} from '@motion-canvas/2d';
+import {all, createRef, createSignal, linear} from '@motion-canvas/core';
 import { CommitRelationArrow } from '../components/commitArrow';
 
 export default makeScene2D(function* (view) {
@@ -60,6 +60,7 @@ export default makeScene2D(function* (view) {
     const progress = createSignal(0);
 
     // TODO: attach text like "feature" or "HEAD" to a commit by using cB.Top
+    const branch = createSignal<Rect>();
     view.add(
         <>
         <Circle
@@ -91,10 +92,6 @@ export default makeScene2D(function* (view) {
                 {...textStyle}
             />
         </Circle>
-        <CommitRelationArrow
-            commitParent={cA}
-            commitChild={cB}
-        />
         <Txt
             text={"."}
             position={cB().right}
@@ -102,6 +99,8 @@ export default makeScene2D(function* (view) {
             fill={"white"}
             lineWidth={2}
         />
+
+
 
 
         <Circle
@@ -121,10 +120,34 @@ export default makeScene2D(function* (view) {
                 {...textStyle}
             />
         </Circle>
+
+
+
+
+
         <CommitRelationArrow
             commitParent={cB}
             commitChild={cC}
         />
+        <CommitRelationArrow
+            commitParent={cA}
+            commitChild={cB}
+        />
+        <Rect layout ref={branch}
+            fill={"#484506"}
+            stroke={"#fbf02e"}
+            lineWidth={2}
+            size={[null, 100]}
+            bottom={cC().top}
+            alignItems={"center"}
+        >
+            <Txt
+                text={"asdfasdf"}
+            />
+        </Rect>
+
+
+
         </>
     );
 
@@ -133,8 +156,11 @@ export default makeScene2D(function* (view) {
 
         cA().absoluteRotation(90, 16),
         cB().absoluteRotation(720, 16),
+        progress(1, 16),
+
+        branch().bottom(cA().top, 2.5)
+
         // cB().position.y(-300, 4),//.to(-300, 1),
-        progress(1, 16)
     );
 
 

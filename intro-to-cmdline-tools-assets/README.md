@@ -1,5 +1,6 @@
 TODO:
 - [ ] figure out why the commit component isn't working
+    * this one is so fucking bullshit
 - [ ] get the animated moving tags working (checkouts jumping across commits, and cleaning moving with a new commit)
 - [ ] for loop with multiple terminal inputs
 	- [ ] function that figures out the time based on the length of the string being typed
