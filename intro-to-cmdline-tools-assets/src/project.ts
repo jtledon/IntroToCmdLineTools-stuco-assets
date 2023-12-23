@@ -5,7 +5,7 @@ import terminal_testing from './scenes/terminal-testing?scene';
 
 export default makeProject({
   scenes: [
-      commit_testing,
+      // commit_testing,
       terminal_testing,
   ],
 });
