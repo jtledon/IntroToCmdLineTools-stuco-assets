@@ -12,6 +12,7 @@ import {
 
 import {
     all,
+    chain,
     createRef,
     createSignal,
     linear,
@@ -46,5 +47,9 @@ export default makeScene2D(function* (view) {
     promptB().left(view.getOriginDelta(Origin.TopLeft))
     promptB().position(promptB().position().addY(3*promptB().size.y()/2))
 
-    yield* text().text("", 0).to("git checkout feature", 2.5, linear)
+    yield* chain(
+        // TODO: have the the time it takes be a fn of the strlen
+        text().text("", 0).to("git checkout feature", 2.5, linear),
+        textB().text("", 0).to("git reset --hard", 2.5, linear)
+    )
 });
