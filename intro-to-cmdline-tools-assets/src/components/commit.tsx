@@ -17,9 +17,9 @@ import {
 
 const commitStyle = {
     width: 200,
-    ratio: 1,
+    // ratio: 1,
     // ratio: 1/2,
-    // ratio: 2,
+    ratio: 2,
     lineWidth: 8
 }
 const textStyle = {
@@ -60,7 +60,6 @@ export class Commit extends Circle {
         // this.commitHash = props.commitHash()
 
         this.add(
-            <>
             <Circle ref={props.commitRef}
                 {...commitStyle} // this come first to have a default
                 {...props} // these come next so that I can override the defaults using props
@@ -74,7 +73,6 @@ export class Commit extends Circle {
                     // text={`${props.commitRef()}`}
                 />
             </Circle>
-            </>
         )
     }
 }

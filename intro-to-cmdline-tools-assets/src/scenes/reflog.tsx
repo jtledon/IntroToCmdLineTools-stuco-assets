@@ -41,6 +41,7 @@ export default makeScene2D(function* (view) {
             commitHash={"f79f20"}
 
             x={-150}
+            ratio={1/1.25}
         />
         <Circle
             ref={rotationPath}
@@ -75,6 +76,10 @@ export default makeScene2D(function* (view) {
         <CommitRelationArrow
             commitParent={cAref}
             commitChild={cBref}
+        />
+        <CommitRelationArrow
+            commitParent={cBref}
+            commitChild={cCref}
         />
         </>
     )

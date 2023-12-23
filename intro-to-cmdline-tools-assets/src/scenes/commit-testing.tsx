@@ -140,6 +140,7 @@ export default makeScene2D(function* (view) {
             size={[null, 100]}
             bottom={cC().top}
             alignItems={"center"}
+            opacity={0}
         >
             <Txt
                 text={"asdfasdf"}
@@ -154,9 +155,9 @@ export default makeScene2D(function* (view) {
     yield* all(
         // cB().opacity(1, 4),
 
-        cA().absoluteRotation(90, 16),
-        cB().absoluteRotation(720, 16),
-        progress(1, 16),
+        cA().absoluteRotation(90, 8),
+        cB().absoluteRotation(720, 8),
+        progress(1, 8),
 
         branch().bottom(cA().top, 2.5)
 
