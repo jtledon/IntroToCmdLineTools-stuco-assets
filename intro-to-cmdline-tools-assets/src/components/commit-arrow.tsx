@@ -92,34 +92,34 @@ export class CommitRelationArrow extends Ray {
                 lineWidth={() => clamp(0, 16, ray().arcLength()) }
                 {...arrowStyle}
             />
-            <Txt
-                text={() => `x(${cChld().position.x().toFixed(2)})\ny(${cChld().position.y().toFixed(2)})`}
-                // text={() => `x(${cChld().absolutePosition().x.toFixed(2)})\ny(${cChld().absolutePosition().y.toFixed(2)})`}
-                fill={"red"}
-                stroke={"red"}
-                lineWidth={2}
-                bottom={() => cChld().top()}
-                fontSize={36}
-            />
-            <Line
-                stroke={"red"}
-                points={[
-                    cChld().position,
-                    () => cChld().position().sub(offsetChld())
-                ]}
-                lineWidth={4}
-                // opacity={0}
-            />
-            <Line
-                stroke={"red"}
-                points={[
-                    cPrnt().position,
-                    () => cPrnt().position().sub(offsetPrnt())
-                ]}
-                lineWidth={4}
-                // opacity={0}
-            />
             </>
         )
+            // <Txt
+            //     text={() => `x(${cChld().position.x().toFixed(2)})\ny(${cChld().position.y().toFixed(2)})`}
+            //     // text={() => `x(${cChld().absolutePosition().x.toFixed(2)})\ny(${cChld().absolutePosition().y.toFixed(2)})`}
+            //     fill={"red"}
+            //     stroke={"red"}
+            //     lineWidth={2}
+            //     bottom={() => cChld().top()}
+            //     fontSize={36}
+            // />
+            // <Line
+            //     stroke={"red"}
+            //     points={[
+            //         cChld().position,
+            //         () => cChld().position().sub(offsetChld())
+            //     ]}
+            //     lineWidth={4}
+            //     // opacity={0}
+            // />
+            // <Line
+            //     stroke={"red"}
+            //     points={[
+            //         cPrnt().position,
+            //         () => cPrnt().position().sub(offsetPrnt())
+            //     ]}
+            //     lineWidth={4}
+            //     // opacity={0}
+            // />
     }
 }
