@@ -2,30 +2,30 @@ import {makeScene2D, Line, Circle, Txt, CubicBezier, Ray, Rect} from '@motion-ca
 import {all, createRef, createSignal, linear} from '@motion-canvas/core';
 import { CommitRelationArrow } from '../components/commit-arrow';
 
+const textStyle = {
+    stroke: "white",
+
+    fontFamily: "courier",
+    // fontWeight={700},
+    lineWidth: 3,
+
+    letterSpacing: 1,
+}
+
+const commitStyle = {
+    width: 200,
+    // ratio: 1,
+    // ratio: 1/2,
+    ratio: 2,
+    lineWidth: 8
+}
+
 export default makeScene2D(function* (view) {
     view.fill("black")
 
     const cA = createRef<Circle>(); // commitA
     const cB = createRef<Circle>(); // commitB
     const cC = createRef<Circle>(); // commitC
-
-    const textStyle = {
-        stroke: "white",
-
-        fontFamily: "courier",
-        // fontWeight={700},
-        lineWidth: 3,
-
-        letterSpacing: 1,
-    }
-
-    const commitStyle = {
-        width: 200,
-        // ratio: 1,
-        // ratio: 1/2,
-        ratio: 2,
-        lineWidth: 8
-    }
 
     view.add(
         <>

@@ -121,6 +121,11 @@ const textStyle = {
 
     letterSpacing: 1,
 }
+const commitStyle = {
+    width: 225,
+    ratio: 1,
+    lineWidth: 8
+}
 
 export default makeScene2D(function* (view) {
     view.fill("black")
@@ -163,17 +168,27 @@ export default makeScene2D(function* (view) {
     //     })}
     // )
 
+
+
+
+
+
+
+
+
+
+    /****************************************************
+     *                  Adding to view
+     ****************************************************/
+
+    // Adding Commits
     nodes.forEach((commits, commitName) => {
         commits.forEach((commit, i) => {
             view.add(
                 <Circle ref={commit.ref}
-                    width={225}
-                    ratio={1}
-
+                    {...commitStyle}
                     fill={commit.fill}
                     stroke={commit.stroke}
-                    lineWidth={10}
-
                     opacity={commit.opacity}
                 >
                     <Txt
@@ -195,7 +210,7 @@ export default makeScene2D(function* (view) {
         })
     })
 
-    // branch arrows
+    // Adding Branch Arrows
     view.add(
         <>
         <CommitRelationArrow
@@ -210,9 +225,25 @@ export default makeScene2D(function* (view) {
     )
 
 
+    // Adding Prompts
+
+
+    // Adding Reflog
 
 
 
+
+
+
+
+
+    /****************************************************
+     *                  Positioning
+     ****************************************************/
+    // positioning all elements in the scene and setting proper parent nodes
+
+
+    // Positioning Commits
     let bot = view.getOriginDelta(Origin.Bottom)
     nodes.forEach((commits, commitName) => {
         let commitOffset = 325;
@@ -236,6 +267,7 @@ export default makeScene2D(function* (view) {
         }
 
         commits.forEach((commit, i) => {
+            commit.ref().reparent(view)
             let pos = bot.add(new Vector2(baseX, baseY - i*commitOffset))
             commit.ref().position(pos)
             // commit.ref().absolutePosition(() => [baseX, baseY - i*commitOffset])
@@ -266,5 +298,13 @@ export default makeScene2D(function* (view) {
 
 
 
+
+
+
+
+    /****************************************************
+     *                  Animating
+     ****************************************************/
     yield* nodes.get("bugfix")[1].ref().opacity(1, 2)
+
 });
