@@ -94,6 +94,7 @@ export class CommitRelationArrow extends Ray {
             />
             <Txt
                 text={() => `x(${cChld().position.x().toFixed(2)})\ny(${cChld().position.y().toFixed(2)})`}
+                // text={() => `x(${cChld().absolutePosition().x.toFixed(2)})\ny(${cChld().absolutePosition().y.toFixed(2)})`}
                 fill={"red"}
                 stroke={"red"}
                 lineWidth={2}

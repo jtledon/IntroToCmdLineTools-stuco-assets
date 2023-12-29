@@ -66,7 +66,6 @@ export class Commit extends Circle {
                 {...props} // these come next so that I can override the defaults using props
                 fill={props.fillColor} // these come after because they are mandatory to set
                 stroke={props.strokeColor}
-                // x={-150}
             >
                 <Txt
                     {...textStyle}
@@ -76,6 +75,7 @@ export class Commit extends Circle {
             </Circle>
             <Txt
                 text={() => `x(${props.commitRef().position.x().toFixed(2)})\ny(${props.commitRef().position.y().toFixed(2)})`}
+                // text={() => `x(${props.commitRef().absolutePosition().x.toFixed(2)})\ny(${props.commitRef().absolutePosition().y.toFixed(2)})`}
                 fill={"yellow"}
                 stroke={"yellow"}
                 lineWidth={2}
@@ -86,3 +86,34 @@ export class Commit extends Circle {
         )
     }
 }
+
+// export function* Cmt(
+//     commitRef: Reference<Circle>,
+//     fillColor: SignalValue<PossibleColor>,
+//     strokeColor: SignalValue<PossibleColor>,
+//     commitHash: SignalValue<string>) {
+//     return (
+//         <>
+//         <Circle ref={commitRef}
+//             {...commitStyle} // this come first to have a default
+//             fill={fillColor} // these come after because they are mandatory to set
+//             stroke={strokeColor}
+//         >
+//             <Txt
+//                 {...textStyle}
+//                 text={commitHash}
+//                 // text={`${commitRef()}`}
+//             />
+//         </Circle>
+//         <Txt
+//             text={() => `x(${commitRef().position.x().toFixed(2)})\ny(${commitRef().position.y().toFixed(2)})`}
+//             // text={() => `x(${commitRef().absolutePosition().x.toFixed(2)})\ny(${commitRef().absolutePosition().y.toFixed(2)})`}
+//             fill={"yellow"}
+//             stroke={"yellow"}
+//             lineWidth={2}
+//             bottom={() => commitRef().top()}
+//             fontSize={36}
+//         />
+//         </>
+//     )
+// }

@@ -14,82 +14,168 @@ import {
     all,
     chain,
     createRef,
+    createRefArray,
+    createRefMap,
     createSignal,
     linear,
     Origin,
+    PossibleColor,
+    Reference,
 } from '@motion-canvas/core';
 import { Commit } from '../components/commit';
 import { CommitRelationArrow } from '../components/commit-arrow';
 import { Prompt } from '../components/prompt';
 
+
+interface NodeType {
+    ref: Reference<Circle>
+    fill: PossibleColor
+    stroke: PossibleColor
+    hash: string
+}
+var nodes = new Map<string, NodeType>()
+
+nodes.set("main1", {
+        ref: createRef<Circle>(),
+        fill: "#213419",
+        stroke: "#89bd60",
+        hash: "fd62a7",
+})
+nodes.set("main2", {
+        ref: createRef<Circle>(),
+        fill: "#213419",
+        stroke: "#89bd60",
+        hash: "fd62a7",
+})
+nodes.set("main3", {
+        ref: createRef<Circle>(),
+        fill: "#213419",
+        stroke: "#89bd60",
+        hash: "fd62a7",
+})
+ nodes.set("main4", {
+        ref: createRef<Circle>(),
+        fill: "#213419",
+        stroke: "#89bd60",
+        hash: "fd62a7",
+})
+
+
+
+ nodes.set("feature1", {
+        ref: createRef<Circle>(),
+        fill: "#1d363e",
+        stroke: "#72c3e2",
+        hash: "fd62a7",
+})
+ nodes.set("feature2", {
+        ref: createRef<Circle>(),
+        fill: "#1d363e",
+        stroke: "#72c3e2",
+        hash: "fd62a7",
+})
+ nodes.set("feature3", {
+        ref: createRef<Circle>(),
+        fill: "#1d363e",
+        stroke: "#72c3e2",
+        hash: "fd62a7",
+})
+
+
+
+ nodes.set("bugfix1", {
+        ref: createRef<Circle>(),
+        fill: "#451f15",
+        stroke: "#ef7d5e",
+        hash: "fd62a7",
+})
+ nodes.set("bugfix2", {
+        ref: createRef<Circle>(),
+        fill: "#451f15",
+        stroke: "#ef7d5e",
+        hash: "fd62a7",
+})
+
+const textStyle = {
+    stroke: "white",
+
+    fontFamily: "courier",
+    // fontWeight={700},
+    lineWidth: 3,
+
+    letterSpacing: 1,
+}
+
 export default makeScene2D(function* (view) {
     view.fill("black")
 
-    const cAref = createRef<Circle>();
-    const cBref = createRef<Circle>();
-    const cCref = createRef<Circle>();
-    const cDref = createRef<Circle>();
+    // for (let i = 0; i < nodes.length; i++) {
+    //     view.add(
+    //         <Circle ref={circRefs}
+    //             width={200}
+    //             ratio={1}
+    //             x={i*250}
+    //             y={0}
+    //
+    //             fill={nodes[i].fill}
+    //             stroke={nodes[i].stroke}
+    //             lineWidth={10}
+    //         >
+    //             <Txt
+    //                 text={nodes[i].hash}
+    //             />
+    //         </Circle>
+    //     )
+    // }
 
-    const rotationPath = createRef<Circle>();
-    const progress = createSignal(0);
-    view.add(
-        <>
-        <Commit
-            commitRef={cAref}
-            fillColor={"#451f15"}
-            strokeColor={"#ef7d5e"}
-            commitHash={"f79f20"}
+    // view.add(
+    //     {circRefs.map((ref, i) => {
+    //         <Circle ref={circRefs}
+    //             width={200}
+    //             ratio={1}
+    //             x={i*250}
+    //             y={0}
+    //
+    //             fill={nodes[i].fill}
+    //             stroke={nodes[i].stroke}
+    //             lineWidth={10}
+    //         >
+    //             <Txt
+    //                 text={nodes[i].hash}
+    //             />
+    //         </Circle>
+    //     })}
+    // )
 
-            x={-150}
-            ratio={1/1.25}
-        />
-        <Circle
-            ref={rotationPath}
-            ratio={2}
-            width={1000}
-            stroke={"yellow"}
-            lineWidth={6}
-            x={cAref().absolutePosition().x}
-        />
+    nodes.forEach((commitData, commitName) => {
+        view.add(
+            <Circle ref={commitData.ref}
+                width={200}
+                ratio={1}
 
+                fill={commitData.fill}
+                stroke={commitData.stroke}
+                lineWidth={10}
+            >
+                <Txt
+                    {...textStyle}
+                    text={commitData.hash}
+                />
+            </Circle>
 
-        <Commit
-            commitRef={cBref}
-            position={() => rotationPath().getPointAtPercentage(progress()).position}
-            fillColor={"#1d363e"}
-            strokeColor={"#72c3e2"}
-            commitHash={"3b5220"}
-            // opacity={0}
-        />
-        <Commit
-            commitRef={cCref}
-            fillColor={"#213419"}
-            strokeColor={"#89bd60"}
-            commitHash={"ba09f4"}
+        )
+    })
 
-            x={150}
-            y={-400}
-        />
+    nodes.get("main1").ref().position(() => [0, 0])
+    nodes.get("main2").ref().position(() => [0, -250])
+    nodes.get("main3").ref().position(() => [0, -500])
+    nodes.get("main4").ref().position(() => [0, -750])
+    nodes.get("feature1").ref().position(() => [250, -400])
+    nodes.get("feature2").ref().position(() => [250, -650])
+    nodes.get("feature3").ref().position(() => [250, -900])
+    nodes.get("bugfix1").ref().position(() => [-250, -900])
+    nodes.get("bugfix2").ref().position(() => [-250, -1150])
 
-
-
-        <CommitRelationArrow
-            commitParent={cAref}
-            commitChild={cBref}
-        />
-        <CommitRelationArrow
-            commitParent={cBref}
-            commitChild={cCref}
-        />
-        </>
-    )
-
-    yield* all(
-        cBref().opacity(1, 2),
-
-        cAref().absoluteRotation(90, 8),
-        cBref().absoluteRotation(720, 8),
-        // cB().position.y(-300, 4),//.to(-300, 1),
-        progress(1, 8)
-    );
+    // yield* circRefs[0].position.x(1000, 2)
+    // yield* all(...circRefs.map(circ => circ.fill('white', 1.5)));
 });
